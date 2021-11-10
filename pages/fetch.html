@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <h1>fetch!</h1>
+
+    <button onclick="getData()">get data</button>
+
+    <script>
+      async function getData() {
+        const cats = await fetch('https://api.thecatapi.com/v1/images/search');
+        console.log(cats.json());
+      }
+    </script>
+  </body>
+</html>

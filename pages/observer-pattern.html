@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <h1>observer-pattern!</h1>
+    <button data-value="30" onclick="emit(event)">Emit 30</button>
+    <button data-value="100" onclick="emit(event)">Emit 100</button>
+    <script>
+      class Subject {
+        constructor() {
+          this.subscribers = [];
+        }
+
+        addSubscriber(subscriber) {
+          this.subscribers.push(subscriber);
+        }
+
+        unsuscribe(subscriber) {
+          this.subscribers = this.subscribers.filter(
+            (sub) => sub !== subscriber
+          );
+        }
+
+        emit(state) {
+          this.notify(state);
+        }
+
+        notify(state) {
+          this.subscribers.forEach((subscriber) => subscriber.notify(state));
+        }
+      }
+
+      class Observer {
+        constructor(subject) {
+          this.observable = subject;
+          this.observable.addSubscriber(this);
+          this.subscriptions = {};
+        }
+
+        subscribe(subscription) {
+          this.subscriptions[subscription] = subscription;
+          return subscription;
+        }
+
+        notify(state) {
+          Object.values(this.subscriptions).forEach((handler) =>
+            handler(state)
+          );
+        }
+
+        unsuscribe(subscription) {
+          delete this.subscriptions[subscription];
+        }
+
+        unsuscribeAll() {
+          this.observable.unsuscribe(this);
+        }
+      }
+
+      const subject = new Subject(10);
+      const observer = new Observer(subject);
+
+      const subscription = observer.subscribe((data) => {
+        console.log('Subs 100:', data);
+        if (data === '100') {
+          observer.unsuscribe(subscription);
+        }
+      });
+      observer.subscribe((data) => {
+        console.log('Subs 30:', data);
+        if (data === '30') {
+          observer.unsuscribeAll();
+        }
+      });
+
+      function emit(e) {
+        const attrValue = e.target.dataset.value;
+        subject.emit(attrValue);
+      }
+    </script>
+  </body>
+</html>

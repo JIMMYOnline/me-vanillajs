@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      #slide-content {
+        width: 500px;
+        border: 1px solid gray;
+        height: 300px;
+        overflow: hidden;
+      }
+
+      .slide {
+        display: flex;
+        width: 100%;
+      }
+
+      .slide.active {
+        display: visible;
+      }
+
+      .slide img {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>slideshow!</h1>
+
+    <section id="slide">
+      <button
+        id="left-btn"
+        onclick="slide && slide.moveLeft && slide.moveLeft()"
+      >
+        left
+      </button>
+      <button
+        id="right-btn"
+        onclick="slide && slide.moveRight && slide.moveRight()"
+      >
+        right
+      </button>
+      <div id="slide-content">
+        <div class="slide">
+          <h2>1</h2>
+          <img
+            src="https://images.unsplash.com/photo-1620165366489-d08eff58ccf5?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1770&q=80"
+            alt=""
+          />
+        </div>
+        <div class="slide">
+          <h2>2</h2>
+          <img
+            src="https://images.unsplash.com/photo-1635810409735-b3a413dcf64a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=776&q=80"
+            alt=""
+          />
+        </div>
+        <div class="slide">
+          <h2>3</h2>
+          <img
+            src="https://images.unsplash.com/photo-1635804702734-2ac214b4d696?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=654&q=80"
+            alt=""
+          />
+        </div>
+      </div>
+
+      <script>
+        function Slide() {
+          const slides = document.getElementsByClassName('slide');
+          let activeSlide = 0;
+          Array.from(slides).forEach((item) => (item.style.display = 'none'));
+          slides[activeSlide].style.display = 'flex';
+          let interval;
+
+          function init() {
+            interval = setInterval(() => moveLeft(), 2000);
+          }
+
+          function stop() {
+            clearInterval(interval);
+          }
+
+          function moveRight() {
+            slides[activeSlide].style.display = 'none';
+            if (activeSlide === slides.length - 1) {
+              activeSlide = 0;
+            } else {
+              activeSlide++;
+            }
+            slides[activeSlide].style.display = 'flex';
+          }
+
+          function moveLeft() {
+            slides[activeSlide].style.display = 'none';
+            if (activeSlide === 0) {
+              activeSlide = slides.length - 1;
+            } else {
+              activeSlide--;
+            }
+            slides[activeSlide].style.display = 'flex';
+          }
+
+          return {
+            init,
+            stop,
+            moveRight,
+            moveLeft,
+          };
+        }
+
+        const slide = new Slide();
+        slide.init();
+
+        /*setTimeout(() => {
+          slide.stop();
+        }, 1000);*/
+      </script>
+    </section>
+  </body>
+</html>
